@@ -30,6 +30,11 @@ public class UsuarioController {
         return ResponseEntity.created(uri).body(service.save(dto));
     }
 
+    @PutMapping
+    public ResponseEntity<UsuarioDto> update(@RequestBody UsuarioDto dto, @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(service.update(token, dto));
+    }
+
     @PostMapping("/login")
     public String login(@RequestBody UsuarioDto usuarioDto) {
         Authentication authentication = authenticationManager.authenticate(

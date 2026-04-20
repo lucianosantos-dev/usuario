@@ -38,7 +38,7 @@ public class UsuarioMapper {
     public Endereco paraEndereco(EnderecoDto dto) {
         return Endereco.builder()
                 .rua(dto.getRua())
-                .cep(dto.getCep())
+                .numero(dto.getNumero())
                 .complemento(dto.getComplemento())
                 .cidade(dto.getCidade())
                 .estado(dto.getEstado())
@@ -49,7 +49,7 @@ public class UsuarioMapper {
     public EnderecoDto paraEnderecoDto(Endereco entities) {
         return EnderecoDto.builder()
                 .rua(entities.getRua())
-                .cep(entities.getCep())
+                .numero(entities.getNumero())
                 .complemento(entities.getComplemento())
                 .cidade(entities.getCidade())
                 .estado(entities.getEstado())
@@ -86,6 +86,17 @@ public class UsuarioMapper {
 
     public List<TelefoneDto> paraListaTelefoneDto(List<Telefone> entities) {
         return entities.stream().map(this::paraTelefoneDto).toList();
+    }
+
+    public Usuario updateUsuario(UsuarioDto usuarioDto, Usuario entity){
+        return Usuario.builder()
+                .nome(usuarioDto.getNome() != null ? usuarioDto.getNome() : entity.getNome())
+                .id(entity.getId())
+                .senha(usuarioDto.getSenha() != null ? usuarioDto.getSenha() : entity.getSenha())
+                .email(usuarioDto.getEmail() != null ? usuarioDto.getEmail() : entity.getEmail())
+                .enderecos(entity.getEnderecos())
+                .telefones(entity.getTelefones())
+                .build();
     }
 
 }
