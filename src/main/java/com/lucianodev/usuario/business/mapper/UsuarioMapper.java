@@ -38,7 +38,7 @@ public class UsuarioMapper {
     public Endereco paraEndereco(EnderecoDto dto) {
         return Endereco.builder()
                 .rua(dto.getRua())
-                .cep(dto.getCep())
+                .numero(dto.getNumero())
                 .complemento(dto.getComplemento())
                 .cidade(dto.getCidade())
                 .estado(dto.getEstado())
@@ -49,7 +49,7 @@ public class UsuarioMapper {
     public EnderecoDto paraEnderecoDto(Endereco entities) {
         return EnderecoDto.builder()
                 .rua(entities.getRua())
-                .cep(entities.getCep())
+                .numero(entities.getNumero())
                 .complemento(entities.getComplemento())
                 .cidade(entities.getCidade())
                 .estado(entities.getEstado())
