@@ -1,8 +1,9 @@
 package com.lucianodev.usuario.controller;
 
 import com.lucianodev.usuario.business.UsuarioService;
+import com.lucianodev.usuario.business.dto.EnderecoDto;
+import com.lucianodev.usuario.business.dto.TelefoneDto;
 import com.lucianodev.usuario.business.dto.UsuarioDto;
-import com.lucianodev.usuario.infrastructure.entity.Usuario;
 import com.lucianodev.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Usuario> searchUserByEmail(@RequestParam("email") String email) {
+    public ResponseEntity<UsuarioDto> searchUserByEmail(@RequestParam("email") String email) {
         return ResponseEntity.ok(service.searchUserByEmail(email));
     }
 
@@ -53,5 +54,15 @@ public class UsuarioController {
     public ResponseEntity<Void> delete(@PathVariable String email) {
         service.deleteByEmail(email);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDto> atualizaEndereco(@RequestBody EnderecoDto dto, @RequestParam("id") Long id) {
+        return ResponseEntity.ok(service.atualizaEndereco(id, dto));
+    }
+
+    @PutMapping("telefone")
+    public ResponseEntity<TelefoneDto> atualizaTelefone(@RequestBody TelefoneDto dto, @RequestParam("id") Long id) {
+        return ResponseEntity.ok(service.atualizaTelefone(id, dto));
     }
 }

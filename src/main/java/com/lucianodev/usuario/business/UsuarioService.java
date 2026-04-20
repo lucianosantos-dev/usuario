@@ -1,10 +1,16 @@
 package com.lucianodev.usuario.business;
 
+import com.lucianodev.usuario.business.dto.EnderecoDto;
+import com.lucianodev.usuario.business.dto.TelefoneDto;
 import com.lucianodev.usuario.business.dto.UsuarioDto;
 import com.lucianodev.usuario.business.mapper.UsuarioMapper;
+import com.lucianodev.usuario.infrastructure.entity.Endereco;
+import com.lucianodev.usuario.infrastructure.entity.Telefone;
 import com.lucianodev.usuario.infrastructure.entity.Usuario;
 import com.lucianodev.usuario.infrastructure.exceptions.ConflitException;
 import com.lucianodev.usuario.infrastructure.exceptions.ResourceNotFoundException;
+import com.lucianodev.usuario.infrastructure.repository.EnderecoRepository;
+import com.lucianodev.usuario.infrastructure.repository.TelefoneRepository;
 import com.lucianodev.usuario.infrastructure.repository.UsuarioRepository;
 import com.lucianodev.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +25,8 @@ public class UsuarioService {
     private final UsuarioMapper mapper;
     private final PasswordEncoder encoder;
     private final JwtUtil jwtUtil;
+    private final EnderecoRepository enderecoRepository;
+    private final TelefoneRepository telefoneRepository;
 
 
     public UsuarioDto save(UsuarioDto dto) {
@@ -54,12 +62,36 @@ public class UsuarioService {
         return repository.existsByEmail(email);
     }
 
-    public Usuario searchUserByEmail(String email) {
-        return repository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Email não encontrado!"));
+    public UsuarioDto searchUserByEmail(String email) {
+        try {
+            return mapper.paraUsuarioDto(repository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Email não encontrado!")));
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException("Email não encontrado");
+        }
+
     }
 
     public void deleteByEmail(String email) {
         repository.deleteByEmail(email);
+    }
+
+    public EnderecoDto atualizaEndereco(Long id, EnderecoDto dto) {
+        Endereco entity = enderecoRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Id não encontrado!"));
+
+        Endereco endereco = mapper.updateEndereco(dto, entity);
+        enderecoRepository.save(endereco);
+        return mapper.paraEnderecoDto(endereco);
+    }
+
+    public TelefoneDto atualizaTelefone(Long id, TelefoneDto dto) {
+        Telefone entity = telefoneRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Id não encontrado!"));
+
+        Telefone telefone = mapper.updateTelefone(dto, entity);
+        telefoneRepository.save(telefone);
+        return mapper.paraTelefoneDto(telefone);
+
     }
 }
