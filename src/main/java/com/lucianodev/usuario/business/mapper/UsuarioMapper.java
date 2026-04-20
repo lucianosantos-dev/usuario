@@ -121,4 +121,24 @@ public class UsuarioMapper {
                 .build();
     }
 
+    public Endereco paraEnderecoEntity(EnderecoDto dto, Long id){
+        return Endereco.builder()
+                .rua(dto.getRua())
+                .numero(dto.getNumero())
+                .complemento(dto.getComplemento())
+                .cidade(dto.getCidade())
+                .estado(dto.getEstado())
+                .cep(dto.getCep())
+                .usuarioId(id)
+                .build();
+    }
+
+    public Telefone paraTelefoneEntity(TelefoneDto dto, Long id){
+        return Telefone.builder()
+                .ddd(dto.getDdd())
+                .numero(dto.getNumero())
+                .usuarioId(id)
+                .build();
+    }
+
 }
